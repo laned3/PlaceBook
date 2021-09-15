@@ -1,4 +1,3 @@
-// 1
 package com.lanedever.placebook.adapter
 import android.app.Activity
 import android.graphics.Bitmap
@@ -7,25 +6,30 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import com.lanedever.placebook.databinding.ContentBookmarkInfoBinding
 import com.lanedever.placebook.ui.MapsActivity
+import com.lanedever.placebook.viewmodel.MapsViewModel
 
-// 2
-class BookmarkInfoWindowAdapter(context: Activity) :
-    GoogleMap.InfoWindowAdapter {
-    // 3
-    private val binding =
-        ContentBookmarkInfoBinding.inflate(context.layoutInflater)
-    // 4
+class BookmarkInfoWindowAdapter(val context: Activity) : GoogleMap.InfoWindowAdapter {
+    private val binding = ContentBookmarkInfoBinding.inflate(context.layoutInflater)
     override fun getInfoWindow(marker: Marker): View? {
         // This function is required, but can return null if
         // not replacing the entire info window
         return null
     }
-    // 5
-    override fun getInfoContents(marker: Marker): View? {
+    override fun getInfoContents(marker: Marker): View {
         binding.title.text = marker.title ?: ""
         binding.phone.text = marker.snippet ?: ""
         val imageView = binding.photo
-        imageView.setImageBitmap((marker.tag as MapsActivity.PlaceInfo).image)
+        when (marker.tag) {
+            is MapsActivity.PlaceInfo -> {
+                imageView.setImageBitmap(
+                    (marker.tag as MapsActivity.PlaceInfo).image)
+            }
+            is MapsViewModel.BookmarkMarkerView -> {
+                val bookMarkview = marker.tag as
+                        MapsViewModel.BookmarkMarkerView
+                imageView.setImageBitmap(bookMarkview.getImage(context))
+            }
+        }
         return binding.root
     }
 }
