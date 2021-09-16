@@ -4,7 +4,6 @@
     <data>
         <variable
             name="bookmarkDetailsView"
-
             type="com.lanedever.placebook.viewmodel.BookmarkDetailsViewModel.BookmarkDetailsView" />
     </data>
 
