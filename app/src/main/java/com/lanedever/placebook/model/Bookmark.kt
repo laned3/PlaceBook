@@ -5,23 +5,19 @@ import android.graphics.Bitmap
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.lanedever.placebook.util.ImageUtils
+import com.lanedever.placebook.util.FileUtils
 
 @Entity
 data class Bookmark(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
     var placeId: String? = null,
-
     var name: String = "",
-
     var address: String = "",
-
     var latitude: Double = 0.0,
-
     var longitude: Double = 0.0,
-
     var phone: String = "",
-
-    var notes: String = ""
+    var notes: String = "",
+    var category: String = ""
 )
 
 {
@@ -31,6 +27,13 @@ data class Bookmark(
                 generateImageFilename(it))
         }
     }
+
+    fun deleteImage(context: Context) {
+        id?.let {
+            FileUtils.deleteFile(context, generateImageFilename(it))
+        }
+    }
+
     companion object {
         fun generateImageFilename(id: Long): String {
             return "bookmark$id.png"
